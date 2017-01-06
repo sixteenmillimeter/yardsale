@@ -22,7 +22,7 @@ server.use(restify.queryParser());
 server.use(restify.bodyParser({ mapParams: true }));
 server.use(restify.authorizationParser());
 
-//server.get(/\/static\/?.*/, restify.serveStatic({ directory : __dirname }));
+server.get(/\/static\/?.*/, restify.serveStatic({ directory : __dirname }));
 
 server.get('/', index);
 
