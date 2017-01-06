@@ -7,7 +7,7 @@ var restify = require('restify'),
 
 index = function (req, res, next) {
 	'use strict';
-	res.end('Nothing yet');
+	res.end(view.send('index'));
 	return next();
 };
 
