@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/sixteenmillimeter/yardsale/issues"
   },
-  "homepage": "https://github.com/sixteenmillimeter/yardsale#readme"
+  "homepage": "https://github.com/sixteenmillimeter/yardsale#readme",
+  "dependencies": {
+    "restify": "^4.3.0"
+  }
 }
