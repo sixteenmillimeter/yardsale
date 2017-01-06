@@ -3,8 +3,13 @@ console.log('Server starting...');
 var restify = require('restify'),
 	port = process.env.PORT || 8080,
 	view = require('./lib/view.js'),
+	search,
 	server,
 	index;
+
+if (typeof process.env.AWS_ID !== 'undefined') {
+	search = require('./lib/search.js');
+}
 
 index = function (req, res, next) {
 	'use strict';
