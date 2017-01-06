@@ -1,0 +1,23 @@
+{
+  "name": "yardsale",
+  "version": "0.0.1",
+  "description": "A demo of a 3D shopping environment",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sixteenmillimeter/yardsale.git"
+  },
+  "keywords": [
+    "3D",
+    "shopping"
+  ],
+  "author": "mmcwilliams",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sixteenmillimeter/yardsale/issues"
+  },
+  "homepage": "https://github.com/sixteenmillimeter/yardsale#readme"
+}
