@@ -1,8 +1,9 @@
 console.log('Server starting...');
 
 var restify = require('restify'),
-	server,
 	port = process.env.PORT || 8080,
+	view = require('./lib/view.js'),
+	server,
 	index;
 
 index = function (req, res, next) {
