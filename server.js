@@ -35,3 +35,11 @@ server.listen(port, function () {
 	'use strict';
 	console.log('%s listening at %s', server.name, server.url);
 });
+
+search.records({Artist: "Nirvana"}, function (err, results, response) {
+	if (err) {
+		console.error(err[0].Error[0]);
+	}
+	console.dir(results);
+	console.dir(response);
+});

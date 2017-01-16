@@ -22,6 +22,7 @@
   "homepage": "https://github.com/sixteenmillimeter/yardsale#readme",
   "dependencies": {
     "amazon-product-api": "^0.4.2",
+    "limiter": "^1.1.0",
     "restify": "^4.3.0"
   }
 }

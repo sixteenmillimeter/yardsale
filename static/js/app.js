@@ -42,6 +42,8 @@ const RINGS = 16;
 // Create a new mesh with
 // sphere geometry - we will cover
 // the sphereMaterial next!
+const sphereMaterial = new THREE.Material();
+
 const sphere = new THREE.Mesh(
 
   new THREE.SphereGeometry(
