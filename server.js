@@ -1,20 +1,20 @@
-console.log('Server starting...');
+'use strict'
+console.log('Server starting...')
 
-var restify = require('restify'),
-	port = process.env.PORT || 8080,
-	view = require('./lib/view.js'),
-	search,
-	server,
-	index;
+const restify = require('restify')
+const port = process.env.PORT || 8080
+const view = require('./lib/view.js')
+let search
+let server
+let index
 
 if (typeof process.env.AWS_ID !== 'undefined') {
-	search = require('./lib/search.js');
+	search = require('./lib/search.js')
 }
 
-index = function (req, res, next) {
-	'use strict';
-	res.end(view.send('index'));
-	return next();
+index = (req, res, next) => {
+	res.end(view.send('index'))
+	return next()
 };
 
 server = restify.createServer({
@@ -22,24 +22,23 @@ server = restify.createServer({
 	version: '0.0.1'
 });
 
-server.use(restify.acceptParser(server.acceptable));
-server.use(restify.queryParser());
-server.use(restify.bodyParser({ mapParams: true }));
-server.use(restify.authorizationParser());
+server.use(restify.acceptParser(server.acceptable))
+server.use(restify.queryParser())
+server.use(restify.bodyParser({ mapParams: true }))
+server.use(restify.authorizationParser())
 
-server.get(/\/static\/?.*/, restify.serveStatic({ directory : __dirname }));
+server.get(/\/static\/?.*/, restify.serveStatic({ directory : __dirname }))
 
-server.get('/', index);
+server.get('/', index)
 
-server.listen(port, function () {
-	'use strict';
-	console.log('%s listening at %s', server.name, server.url);
+server.listen(port, () => {
+	console.log(`${server.name} listening at ${server.url}`)
 });
 
-search.records({Artist: "Nirvana"}, function (err, results, response) {
+search.records({Artist: "Nirvana"}, (err, results, response) => {
 	if (err) {
-		console.error(err[0].Error[0]);
+		console.error(err[0].Error[0])
 	}
-	console.dir(results);
-	console.dir(response);
-});
+	console.dir(results)
+	console.dir(response)
+})
