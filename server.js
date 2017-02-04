@@ -38,7 +38,7 @@ server.listen(port, () => {
 
 search.records({Artist: "Nirvana"}, (err, results, response) => {
 	if (err) {
-		console.error(err[0].Error[0])
+		return console.error(err)
 	}
 	console.dir(results)
 	console.dir(response)
