@@ -49,42 +49,91 @@ class YardSale {
 
 	addCamera () {
 		this.camera = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR )
-		this.camera.position.y = 40
-		this.camera.rotation.x = -0.2
+		this.camera.position.y = 60
+		this.camera.rotation.x = -0.3
 		this.scene.add(this.camera)
 	}
 
 	addObjects () {
+		this.addTable()
+		this.addBox()
+	}
+
+	addTable (x = 200, y = 80, legH = 70) {
 		const tableMaterial = new THREE.MeshLambertMaterial({ color: 0x996600 })
 		const legMaterial = new THREE.MeshPhongMaterial({ color: 0x7b7f82 })
 
-		const tableTop = new THREE.Mesh(new THREE.CubeGeometry(200, 5, 80), tableMaterial)
-		const legShape = new THREE.CylinderGeometry(2, 2, 70, 10)
+		const tableTop = new THREE.Mesh(new THREE.CubeGeometry(x, 5, y), tableMaterial)
+		const legShape = new THREE.CylinderGeometry(2, 2, legH, 10)
 		let leg
 		this.table = new THREE.Object3D()
 		for (let i = 0; i < 4; i++) {
 			leg = new THREE.Mesh(legShape, legMaterial)
-			leg.position.y = -35
+			leg.position.y = -(legH / 2)
 			//TODO: this is bad
 			if (i === 0) {
-				leg.position.x = 97
-				leg.position.z = 37
+				leg.position.x = (x / 2) - 3
+				leg.position.z = (y / 2) - 3
 			} else if (i === 1) {
-				leg.position.x = -97
-				leg.position.z = 37
+				leg.position.x = -(x / 2) + 3
+				leg.position.z = (y / 2) - 3
 			} else if (i === 2) {
-				leg.position.x = -97
-				leg.position.z = -37
+				leg.position.x = -(x / 2) + 3
+				leg.position.z = -(y / 2) + 3
 			} else if (i === 3) {
-				leg.position.x = 97
-				leg.position.z = -37
+				leg.position.x = (x / 2) - 3
+				leg.position.z = -(y / 2) + 3
 			}
  			this.table.add(leg)
 		}
 		this.table.add(tableTop)
 		this.table.position.z = -200
-
 		this.scene.add(this.table)
+	}
+
+	addBox (x = 60, y = 40, z = 40) {
+		const boxMaterial = new THREE.MeshLambertMaterial({ color: 0xCC9933 })
+		const t = 0.5
+		let boxShape
+		let boxSide
+		let xPos
+		let zPos
+		let yRot
+		this.box = new THREE.Object3D()
+		for (let i = 0; i < 4; i++) {
+			if (i === 0) {
+				boxShape = new THREE.CubeGeometry(t, z, y)
+				xPos = x / 2
+				zPos = 0
+				yRot = 0
+			} else if (i === 1) {
+				boxShape = new THREE.CubeGeometry(t, z, x)
+				xPos = 0
+				zPos = y / 2
+				yRot = Math.PI / 2
+			} else if (i === 2) {
+				boxShape = new THREE.CubeGeometry(t, z, y)
+				xPos = -(x / 2)
+				zPos = 0
+				yRot = 0
+			} else if (i === 3) {
+				boxShape = new THREE.CubeGeometry(t, z, x)
+				xPos = 0
+				zPos = -(y / 2)
+				yRot = Math.PI / 2
+			}
+			boxSide = new THREE.Mesh(boxShape, boxMaterial)
+			boxSide.position.z = zPos
+			boxSide.position.x = xPos
+			boxSide.rotation.y = yRot
+			boxSide.position.y = z / 2
+			this.box.add(boxSide)
+		}
+		/*			boxSide.position.x = 20
+			boxSide.position.y = 20
+			boxSide.rotation.y = Math.PI / 2*/
+		this.box.position.z = -200
+		this.scene.add(this.box)
 	}
 
 	addStats () {
