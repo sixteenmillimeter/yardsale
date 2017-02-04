@@ -3,7 +3,8 @@ console.log('Server starting...')
 
 const restify = require('restify')
 const port = process.env.PORT || 8080
-const view = require('./lib/view.js')
+const Views = require('./lib/view.js')
+const view = new Views()
 let search
 let server
 let index
