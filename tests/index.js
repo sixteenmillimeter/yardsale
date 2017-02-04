@@ -1,5 +1,5 @@
 'use strict'
-const search = require('../lib/search.js')
+const search = require('../lib/search')
 
 search.records({Artist: "Nirvana"}, (err, results, response) => {
 	if (err) {
