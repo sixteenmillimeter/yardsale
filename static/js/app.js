@@ -19,8 +19,17 @@ const RADIUS = 50
 const SEGMENTS = 16
 const RINGS = 16
 
+function webglAvailable() {
+    try {
+        var c = document.createElement("canvas");
+        return !!window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl"))
+    } catch (e) { 
+        return false
+    } 
+}
+
 const container = document.querySelector('#viewer')
-const renderer = new THREE.WebGLRenderer()
+const renderer = webglAvailable() ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer()
 const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR )
 const scene = new THREE.Scene()
 
