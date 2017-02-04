@@ -8,7 +8,7 @@ class YardSale {
 		this.WIDTH = window.innerWidth
 		this.HEIGHT = window.innerHeight
 		this.ASPECT = this.WIDTH / this.HEIGHT
-		this.VIEW_ANGLE = 45
+		this.VIEW_ANGLE = 40
 		this.NEAR = 0.1
 		this.FAR = 10000
 		this.FPS = 24
@@ -56,8 +56,33 @@ class YardSale {
 
 	addObjects () {
 		const tableMaterial = new THREE.MeshLambertMaterial({ color: 0x996600 })
-		this.table = new THREE.Mesh(new THREE.CubeGeometry(200, 5, 80), tableMaterial)
-		this.table.position.z = -150
+		const legMaterial = new THREE.MeshPhongMaterial({ color: 0x7b7f82 })
+
+		const tableTop = new THREE.Mesh(new THREE.CubeGeometry(200, 5, 80), tableMaterial)
+		const legShape = new THREE.CylinderGeometry(2, 2, 70, 10)
+		let leg
+		this.table = new THREE.Object3D()
+		for (let i = 0; i < 4; i++) {
+			leg = new THREE.Mesh(legShape, legMaterial)
+			leg.position.y = -35
+			//TODO: this is bad
+			if (i === 0) {
+				leg.position.x = 97
+				leg.position.z = 37
+			} else if (i === 1) {
+				leg.position.x = -97
+				leg.position.z = 37
+			} else if (i === 2) {
+				leg.position.x = -97
+				leg.position.z = -37
+			} else if (i === 3) {
+				leg.position.x = 97
+				leg.position.z = -37
+			}
+ 			this.table.add(leg)
+		}
+		this.table.add(tableTop)
+		this.table.position.z = -200
 
 		this.scene.add(this.table)
 	}
