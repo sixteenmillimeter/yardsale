@@ -1,61 +1,84 @@
-// Set the scene size.
-const WIDTH = 400;
-const HEIGHT = 300;
+/*jshint browser: true*/
+/*globals THREE,Stats*/
 
-// Set some camera attributes.
-const VIEW_ANGLE = 45;
-const ASPECT = WIDTH / HEIGHT;
-const NEAR = 0.1;
-const FAR = 10000;
+'use strict'
+const FPS = 24//for animations, not renderer
 
-// Get the DOM element to attach to
-const container = document.querySelector('#viewer');
+let WIDTH = window.innerWidth
+let HEIGHT = window.innerHeight
 
-// Create a WebGL renderer, camera
-// and a scene
-const renderer = new THREE.WebGLRenderer();
-const camera =
-    new THREE.PerspectiveCamera(
-        VIEW_ANGLE,
-        ASPECT,
-        NEAR,
-        FAR
-    );
+const SCREEN_WIDTH = window.screen.availWidth
+const SCREEN_HEIGHT = window.screen.availHeight
 
-const scene = new THREE.Scene();
+const VIEW_ANGLE = 45
+const ASPECT = WIDTH / HEIGHT
+const NEAR = 0.1
+const FAR = 10000
 
-// Add the camera to the scene.
-scene.add(camera);
+const RADIUS = 50
+const SEGMENTS = 16
+const RINGS = 16
 
-// Start the renderer.
-renderer.setSize(WIDTH, HEIGHT);
+const container = document.querySelector('#viewer')
+const renderer = new THREE.WebGLRenderer()
+const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR )
+const scene = new THREE.Scene()
 
-// Attach the renderer-supplied
-// DOM element.
-container.appendChild(renderer.domElement);
+scene.add(camera)
+renderer.setSize(WIDTH, HEIGHT)
+container.appendChild(renderer.domElement)
 
-// Set up the sphere vars
-const RADIUS = 50;
-const SEGMENTS = 16;
-const RINGS = 16;
+const sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xCC0000 })
+const sphere = new THREE.Mesh(new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS), sphereMaterial)
 
-// Create a new mesh with
-// sphere geometry - we will cover
-// the sphereMaterial next!
-const sphereMaterial = new THREE.Material();
+const sM2 = new THREE.MeshLambertMaterial({ color: 0xFFFF99 })
+const s2 = new THREE.Mesh(new THREE.SphereGeometry(2, 8, 8), sM2)
 
-const sphere = new THREE.Mesh(
+const point = new THREE.Object3D()
 
-  new THREE.SphereGeometry(
-    RADIUS,
-    SEGMENTS,
-    RINGS),
+s2.position.x = -100
 
-  sphereMaterial);
+point.add(s2)
+point.position.z = -300
 
-// Move the Sphere back in Z so we
-// can see it.
-sphere.position.z = -300;
+sphere.position.z = -300
 
-// Finally, add the sphere to the scene.
-scene.add(sphere);
+scene.add(sphere)
+scene.add(point)
+
+const pointLight = new THREE.PointLight(0xFFFFFF)
+
+pointLight.position.x = 10
+pointLight.position.y = 50
+pointLight.position.z = 130
+
+scene.add(pointLight)
+
+renderer.render(scene, camera)
+
+const stats = new Stats()
+stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom)
+
+/* FUNCTIONS */
+
+function update () {
+    renderer.render(scene, camera)
+
+    stats.begin()
+    stats.end()
+
+    requestAnimationFrame(update)
+}
+
+requestAnimationFrame(update)
+
+function rotatePoint () {
+    point.rotation.y += 0.01
+}
+
+function animations () {
+    rotatePoint()
+}
+
+setInterval(animations, 1000 / FPS)
