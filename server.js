@@ -5,12 +5,14 @@ const restify = require('restify')
 const port = process.env.PORT || 8080
 const Views = require('./lib/views')
 const view = new Views()
+let Search
 let search
 let server
 let index
 
 if (typeof process.env.AWS_ID !== 'undefined') {
-	search = require('./lib/search')
+	Search = require('./lib/search')
+	search = new Search()
 }
 
 index = (req, res, next) => {
@@ -34,4 +36,4 @@ server.get('/', index)
 
 server.listen(port, () => {
 	console.log(`${server.name} listening at ${server.url}`)
-});
+})

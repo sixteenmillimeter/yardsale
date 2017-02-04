@@ -1,5 +1,6 @@
 'use strict'
-const search = require('../lib/search')
+const Search = require('../lib/search')
+const search = new Search()
 
 search.records({Artist: "Nirvana"}, (err, results, response) => {
 	if (err) {
