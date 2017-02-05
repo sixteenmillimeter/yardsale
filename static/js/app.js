@@ -1,5 +1,5 @@
 /*jshint browser: true*/
-/*globals THREE,Stats*/
+/*globals THREE,Stats,Hyper,chance*/
 
 'use strict'
 
@@ -18,14 +18,30 @@ class YardSale {
 		this.renderer = this.webglAvailable() ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer()
 		this.scene = new THREE.Scene()
 
+		this.cameraM = {
+			x : 0,
+			y : 120,
+			z : -30,
+			rotX : -0.5,
+			i : 0,
+			target : {
+				x : 0,
+				y : 120,
+				z : -30,
+				frames : 0
+			}
+		}
+
 		this.addCamera()
 
 		this.renderer.setSize(this.WIDTH, this.HEIGHT)
 		this.container.appendChild(this.renderer.domElement)
 
 		this.addBindings()
+		//this.addBg()
 		this.addLights()
 		this.addObjects()
+		//this.addControl()
 
 		if (this.DEBUG) {
 			this.addStats()
@@ -35,23 +51,59 @@ class YardSale {
 		this.startAnimation()
 	}
 
+	addBg () {
+		const plane = new THREE.Mesh(
+			new THREE.PlaneBufferGeometry( 40, 40 ),
+			new THREE.MeshPhongMaterial( { color: 0x999999, specular: 0x101010 } )
+		)
+		plane.rotation.x = -Math.PI/2
+		plane.position.y = -0.5
+		this.scene.add( plane )
+
+		plane.receiveShadow = true
+	}
+
 	addLights () {
 		const pointLight = new THREE.PointLight(0xFFFFFF)
 		pointLight.position.x = 200
 		pointLight.position.y = 150
 		pointLight.position.z = -300
 
+		const pointLight2 = new THREE.PointLight(0xFFFFFF)
+		pointLight2.position.x = -400
+		pointLight2.position.y = 400
+
 		const ambLight = new THREE.AmbientLight(0x404040)
 		this.scene.add(ambLight)
 
 		this.scene.add(pointLight)
+		this.scene.add(pointLight2)
 	}
 
 	addCamera () {
+		this.cameraFocus = new THREE.Object3D()
+		this.cameraFocus.position.z = -300
+		this.cameraFocus.position.y = 40
+
 		this.camera = new THREE.PerspectiveCamera(this.VIEW_ANGLE, this.ASPECT, this.NEAR, this.FAR )
-		this.camera.position.y = 60
-		this.camera.rotation.x = -0.3
+		this.camera.position.x = this.cameraM.x
+		this.camera.position.y = this.cameraM.y
+		this.camera.position.z = this.cameraM.z
+		this.camera.rotation.x = -0.5
+
 		this.scene.add(this.camera)
+	}
+
+	addControl () {
+		this.controls = new THREE.TrackballControls( this.camera );
+		this.controls.rotateSpeed = 1.0;
+		this.controls.zoomSpeed = 1.2;
+		this.controls.panSpeed = 0.8;
+		this.controls.noZoom = false;
+		this.controls.noPan = false;
+		this.controls.staticMoving = false;
+		this.controls.dynamicDampingFactor = 0.15;
+		this.controls.keys = [ 65, 83, 68 ];
 	}
 
 	addObjects () {
@@ -129,9 +181,6 @@ class YardSale {
 			boxSide.position.y = z / 2
 			this.box.add(boxSide)
 		}
-		/*			boxSide.position.x = 20
-			boxSide.position.y = 20
-			boxSide.rotation.y = Math.PI / 2*/
 		this.box.position.z = -200
 		this.scene.add(this.box)
 	}
@@ -155,6 +204,45 @@ class YardSale {
 		requestAnimationFrame( this.update.bind(this) )
 	}
 
+	cameraMove () {
+		if (this.cameraM.target.frames === this.cameraM.i) {
+			this.cameraM.x = this.camera.position.x
+			this.cameraM.y = this.camera.position.y
+			this.cameraM.z = this.camera.position.z
+		/*	x : 0,
+			y : 120,
+			z : -30 */
+
+			this.cameraM.target.x = chance.floating({ min : -2, max: 2, fixed : 5 })
+			this.cameraM.target.y = chance.floating({ min : 117, max: 123, fixed : 5 })
+			this.cameraM.target.z = chance.floating({ min : -33, max: -27, fixed : 5 })
+
+			this.cameraM.i = 0
+			let millis = chance.integer({min: 600, max: 1500});
+			this.cameraM.target.frames = Math.round(millis / this.FPS)
+		} else {
+			this.cameraM.i++
+			let progress = this.cameraM.i / this.cameraM.target.frames
+			let diffX = Math.abs(this.cameraM.target.x - this.cameraM.x)
+			let diffY = Math.abs(this.cameraM.target.y - this.cameraM.y)
+			let diffZ = Math.abs(this.cameraM.target.z - this.cameraM.z)
+
+			if (this.cameraM.target.x < this.cameraM.x) {
+				diffX = -diffX
+			}
+			if (this.cameraM.target.y < this.cameraM.y) {
+				diffY = -diffY
+			}
+			if (this.cameraM.target.z < this.cameraM.z) {
+				diffZ = -diffZ
+			}
+			this.camera.position.x = this.cameraM.x + (progress * diffX)
+			this.camera.position.y = this.cameraM.y + (progress * diffY)
+			this.camera.position.z = this.cameraM.z + (progress * diffZ)
+		}
+
+	}
+
 	resize () {
 		this.WIDTH = window.innerWidth
 		this.HEIGHT = window.innerHeight
@@ -167,6 +255,8 @@ class YardSale {
 
 	animation () {
 		//this.table.rotation.y += 0.01
+		//this.camera.lookAt( this.cameraFocus )
+		this.cameraMove()
 	}
 
 	startAnimation () {
