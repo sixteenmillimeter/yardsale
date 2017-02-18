@@ -13,5 +13,9 @@
     "asi": true
   },
   "author": "mmcwilliams",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies" : {
+  	"pg": "^6.1.2",
+    "squel": "^5.7.0"
+  }
 }
