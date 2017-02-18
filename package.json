@@ -30,6 +30,8 @@
     "amazon-product-api": "^0.4.2",
     "hyper3d": "0.0.1",
     "limiter": "^1.1.0",
-    "restify": "^4.3.0"
+    "pg": "^6.1.2",
+    "restify": "^4.3.0",
+    "squel": "^5.7.0"
   }
 }

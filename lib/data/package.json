@@ -1,0 +1,17 @@
+{
+  "name": "data",
+  "version": "1.0.0",
+  "description": "Data module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+    "jshintConfig": {
+    "esversion": 6,
+    "strict": "global",
+    "node": true,
+    "asi": true
+  },
+  "author": "mmcwilliams",
+  "license": "MIT"
+}

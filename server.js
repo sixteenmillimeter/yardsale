@@ -5,6 +5,8 @@ const restify = require('restify')
 const port = process.env.PORT || 8080
 const Views = require('./lib/views')
 const view = new Views()
+const Data = require('./lib/data')
+const data = new Data()
 let Search
 let search
 let server
